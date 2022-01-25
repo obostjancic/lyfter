@@ -1,0 +1,8 @@
+{
+  "name": "lyfter",
+  "version": "0.0.1",
+  "description": "Simple migration heleper",
+  "main": "index.js",
+  "author": "obostjancic",
+  "license": "MIT"
+}
