@@ -4,8 +4,8 @@ import { writeFile, mkdir } from "fs/promises";
 
 const DIR_NAME = "migrations";
 
-export const generateMigration = async (name: string): Promise<string> => {
-  if (!name) throw new Error("Name not provided");
+export const generateMigration = async (name?: string): Promise<string> => {
+  if (!name) throw new Error("Name not provided!");
   const filePath = join(process.cwd(), DIR_NAME, generateFilename(name));
   await mkdir(DIR_NAME);
   await writeFile(filePath, getMigrationFileContent(name));

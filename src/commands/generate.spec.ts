@@ -1,6 +1,19 @@
-import { generateClassName, generateFilename } from "./generate";
+import { generateClassName, generateFilename, generateMigration } from "./generate";
 
-describe("generateMigration", () => {});
+jest.mock("fs/promises");
+
+describe("generateMigration", () => {
+  it("should throw an error because the name is not provided", async () => {
+    const generatingMigrationWithoutName = async () => generateMigration();
+
+    await expect(generatingMigrationWithoutName).rejects.toThrow("Name not provided!");
+  });
+
+  it("should generate a migration", async () => {
+    //FIXME write a proper test
+    generateMigration("test-migration");
+  });
+});
 
 describe("generateFilename", () => {
   it("should return the correct filename", () => {
@@ -31,7 +44,3 @@ describe("generateClassName", () => {
     expect(generateClassName(name)).toBe(className);
   });
 });
-
-describe("createDirectory", () => {
-  it("should create a directory when called")
-})
