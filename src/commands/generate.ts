@@ -1,15 +1,15 @@
 import { exec } from "child_process";
 import { join } from "path";
-import { writeFile } from "fs/promises";
+import { writeFile, mkdir } from "fs/promises";
 
 const DIR_NAME = "migrations";
 
-export const generateMigration = (name: string): string => {
+export const generateMigration = async (name: string): Promise<string> => {
+  if (!name) throw new Error("Name not provided");
   const filePath = join(process.cwd(), DIR_NAME, generateFilename(name));
-
-  createDirectory();
-  writeFile(filePath, getMigrationFileContent(name));
-
+  await mkdir(DIR_NAME);
+  await writeFile(filePath, getMigrationFileContent(name));
+  console.log(`Generated ${filePath}`);
   return filePath;
 };
 
@@ -23,10 +23,6 @@ export const generateClassName = (name: string): string => {
     return g1.toUpperCase() + g2.toLowerCase();
   });
   return pascalCased.replace(/-/g, "");
-};
-
-const createDirectory = () => {
-  exec(`mkdir ${DIR_NAME}`);
 };
 
 const getMigrationFileContent = (name: string): string => {

@@ -1,13 +1,19 @@
 import { readdir } from "fs/promises";
+import { join } from "path";
 import { Migration, MigrationConfig, MigrationRecord, MigrationRepository } from "../types";
 
 export class MigrationService {
   private repo: MigrationRepository;
-
+  private migrationsDirectory: string;
   constructor(private readonly config: MigrationConfig) {
     this.repo = config.migrationRepository;
+    this.migrationsDirectory = this.config.migrations || join(process.cwd(), "migrations");
   }
 
+  /**
+   * Get all the migrations that have not been applied, and apply them.
+   * @returns The list of migrations that were applied.
+   */
   public async apply() {
     const appliedMigrations = await this.getAppliedMigrations();
     const allMigrations = await this.getAllMigrations();
@@ -20,6 +26,11 @@ export class MigrationService {
     return migrationsToApply;
   }
 
+  /**
+   * Rollback all migrations after the one with the given name.
+   * @param {string} name - The name of the migration to rollback to.
+   * @returns The rolled migrations.
+   */
   public async rollbackTo(name: string) {
     const appliedMigrations = await this.getAppliedMigrations();
     const rollbackIndex = appliedMigrations.findIndex(m => m.name === name);
@@ -39,7 +50,7 @@ export class MigrationService {
 
   private async getAllMigrations(): Promise<MigrationRecord[]> {
     try {
-      const migrations = await readdir(this.config.migrations);
+      const migrations = await readdir(this.migrationsDirectory);
       const sortedMigrations = migrations.sort();
       return sortedMigrations.map(m => {
         return {
@@ -64,8 +75,8 @@ export class MigrationService {
   }
 
   private async getMigrationInstance(migration: MigrationRecord): Promise<Migration> {
-    const migrationModule = await import(`${this.config.migrations}/${migration.name}`);
-    const migrationClass = migrationModule.default();
+    const migrationModule = await import(join(this.migrationsDirectory, migration.name));
+    const migrationClass = migrationModule.default;
     return new migrationClass();
   }
 }

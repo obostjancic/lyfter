@@ -31,3 +31,7 @@ describe("generateClassName", () => {
     expect(generateClassName(name)).toBe(className);
   });
 });
+
+describe("createDirectory", () => {
+  it("should create a directory when called")
+})

@@ -7,7 +7,9 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "test": "jest"
+    "test": "jest spec ",
+    "test:unit": "jest src",
+    "test:e2e": "jest e2e"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.11",
@@ -23,6 +25,6 @@
     "typescript": "^4.5.5"
   },
   "bin": {
-    "lyfter": "./dist/bin.js"
+    "lyfter": "./dist/src/bin.js"
   }
 }

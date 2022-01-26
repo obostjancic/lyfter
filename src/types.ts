@@ -6,7 +6,7 @@ export interface Migration {
 export type MigrationRecord = { name: string };
 
 export type MigrationConfig = {
-  migrations: string;
+  migrations?: string;
   migrationRepository: MigrationRepository;
 };
 

@@ -17,7 +17,7 @@ try {
     //   console.log("rollback");
     //   break;
     default:
-      console.log("unknown command");
+      console.log(`Error: Unknown command ${cmd}`);
   }
 } catch (e) {
   console.log(e);
